@@ -1,0 +1,157 @@
+.configuration {
+    h1 {
+        text-align: center;
+    }
+}
+
+.configuration-layer {
+    margin: -1px;
+    border: 1px solid #ccc;
+}
+
+.layer-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    min-height: 7rem;
+}
+
+.display-settings {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    margin: -1px;
+    margin-right: 0px;
+    z-index: 2;
+    input[type="text"]{
+        flex: 1;
+        width: calc(100% - 1px);
+        border-radius: 0px;
+        border: none;
+        line-height: 1;
+        font-weight: bold;
+        font-size: medium;
+    }
+}
+
+.options {
+    border: 1px solid #ccc;
+    margin: -1px;
+}
+.options-header {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #ccc;
+    margin: -1px;
+    margin-left: 0px !important;
+    padding: 5px;
+    text-align: left;
+    font-weight: bold;
+    font-size: medium;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.options-body {
+    margin-left: -1px;
+}
+
+.add-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #ccc 1px solid;
+    margin: -1px;
+    color: #2271b1;
+    &:hover {
+        cursor: pointer;
+        color: white;
+        background-color: #2271b1;
+    }
+}
+
+.image-picker {
+    height: 8rem;
+    width: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    margin: -1px;
+    img {
+        max-height: 100%;
+        max-width: 100%;
+        &:hover {
+            cursor: pointer;
+            filter: brightness(0.8);
+        }
+    }
+    .image-button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        color: #2271b1;
+        &:hover {
+            background-color: #2271b1;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}
+
+.description {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    border: 1px solid #ccc;
+    margin: -1px;
+    margin-right: 0px;
+    textarea {
+        padding: 5px;
+        min-height: 100%;
+        border: none;
+        margin-right: -1px;
+        border-radius: 0px;
+        line-height: 1.25;
+        outline: 0px;
+    }
+}
+
+.delete-layer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #ccc 1px solid;
+    margin: -1px;
+    margin-left: 0px;
+    color: #d63638;
+    &:hover {
+        cursor: pointer;
+        color: white;
+        background-color: #d63638;
+    }
+}
+
+.loader {
+    // a circular loading icon that spins, coloured in wordpress blue
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2271b1;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+}

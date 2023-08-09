@@ -1,0 +1,120 @@
+#product-customiser-settings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    > .button, select {
+        width: 100%
+    }
+    > .button {
+        text-align: center;
+    }
+}
+
+#configuration-table-modal {
+    width: 50vw;
+    height: 80vh;
+    background-color: white;
+    padding: 20px;
+    opacity: 1;
+    border: 1px solid #ccc;
+    select {
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    td {
+        border: 1px solid #ccc;
+        vertical-align: middle;
+        padding: 5px;
+        input[type="text"] {
+            border: 0;
+            background: transparent;
+        }
+        &.option-name, &.option-price {
+            font-weight: bold;
+            &.option-unavailable {
+                text-decoration: line-through;
+                background: repeating-linear-gradient(
+                    -45deg,
+                    #fff,
+                    #fff 7px,
+                    #ccc 7px,
+                    #d5c2c2 10px
+                    );
+            }
+        }    
+        label {
+            position: relative;
+            display: inline-block;
+            
+            input[type="checkbox"] {
+              display: none !important;
+              
+              &:checked {
+                + .unavailable-cross {
+                  &::before,
+                  &::after {
+                    background-color: red;
+                  }
+                }
+              }
+            }
+          }
+          
+          .unavailable-cross {
+            height: 3rem;
+            width: 3rem;
+            display: block;
+            background: white;
+            border: 1px solid black;
+            border-radius: 10px;
+            
+            &::before, &::after {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 2px;
+              height: 126%;
+              background-color: transparent;
+              transform-origin: center center;
+            }
+            
+            &::before {
+              transform: translate(-50%, -50%) rotate(45deg);
+            }
+            
+            &::after {
+              transform: translate(-50%, -50%) rotate(-45deg);
+            }
+          }
+          
+        
+    }
+}
+
+#loading-dialog {
+    border: 2px solid black;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; // Light grey
+    border-top: 16px solid #2271b1; // Blue
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto; // center the loader in the div
+  
+    // define the spinning animation
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  }
+  
