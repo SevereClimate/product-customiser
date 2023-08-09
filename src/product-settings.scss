@@ -1,3 +1,5 @@
+@use "scss/colors";
+
 #product-customiser-settings {
     display: flex;
     flex-direction: column;
@@ -15,10 +17,10 @@
 #configuration-table-modal {
     width: 50vw;
     height: 80vh;
-    background-color: white;
+    background-color: colors.$white;
     padding: 20px;
     opacity: 1;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     select {
       margin-top: 4px;
       margin-bottom: 8px;
@@ -28,7 +30,7 @@
         width: 100%;
     }
     td {
-        border: 1px solid #ccc;
+        border: 1px solid colors.$dark-grey;
         vertical-align: middle;
         padding: 5px;
         input[type="text"] {
@@ -41,10 +43,10 @@
                 text-decoration: line-through;
                 background: repeating-linear-gradient(
                     -45deg,
-                    #fff,
-                    #fff 7px,
-                    #ccc 7px,
-                    #d5c2c2 10px
+                    colors.$white,
+                    colors.$white 7px,
+                    colors.$dark-grey 7px,
+                    colors.$dark-grey 10px
                     );
             }
         }    
@@ -59,7 +61,7 @@
                 + .unavailable-cross {
                   &::before,
                   &::after {
-                    background-color: red;
+                    background-color: colors.$red;
                   }
                 }
               }
@@ -70,8 +72,8 @@
             height: 3rem;
             width: 3rem;
             display: block;
-            background: white;
-            border: 1px solid black;
+            background: colors.$white;
+            border: 1px solid colors.$black;
             border-radius: 10px;
             
             &::before, &::after {
@@ -99,12 +101,12 @@
 }
 
 #loading-dialog {
-    border: 2px solid black;
+    border: 2px solid colors.$black;
 }
 
 .loader {
-    border: 16px solid #f3f3f3; // Light grey
-    border-top: 16px solid #2271b1; // Blue
+    border: 16px solid colors.$light-grey grey;
+    border-top: 16px solid colors.$blue;
     border-radius: 50%;
     width: 120px;
     height: 120px;

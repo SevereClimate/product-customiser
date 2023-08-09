@@ -1,3 +1,5 @@
+@use "scss/colors";
+
 .configuration {
     h1 {
         text-align: center;
@@ -6,7 +8,7 @@
 
 .configuration-layer {
     margin: -1px;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
 }
 
 .layer-settings {
@@ -21,7 +23,7 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     margin: -1px;
     margin-right: 0px;
     z-index: 2;
@@ -37,13 +39,13 @@
 }
 
 .options {
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     margin: -1px;
 }
 .options-header {
     display: flex;
     flex-direction: row;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     margin: -1px;
     margin-left: 0px !important;
     padding: 5px;
@@ -63,13 +65,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: #ccc 1px solid;
+    border: colors.$dark-grey 1px solid;
     margin: -1px;
-    color: #2271b1;
+    color: colors.$blue;
     &:hover {
         cursor: pointer;
-        color: white;
-        background-color: #2271b1;
+        color: colors.$white;
+        background-color: colors.$blue;
     }
 }
 
@@ -80,7 +82,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     margin: -1px;
     img {
         max-height: 100%;
@@ -97,10 +99,10 @@
         align-items: center;
         height: 100%;
         width: 100%;
-        color: #2271b1;
+        color: colors.$blue;
         &:hover {
-            background-color: #2271b1;
-            color: white;
+            background-color: colors.$blue;
+            color: colors.$white;
             cursor: pointer;
         }
     }
@@ -112,7 +114,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: stretch;
-    border: 1px solid #ccc;
+    border: 1px solid colors.$dark-grey;
     margin: -1px;
     margin-right: 0px;
     textarea {
@@ -130,21 +132,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: #ccc 1px solid;
+    border: colors.$dark-grey 1px solid;
     margin: -1px;
     margin-left: 0px;
-    color: #d63638;
+    color: colors.$red;
     &:hover {
         cursor: pointer;
-        color: white;
-        background-color: #d63638;
+        color: colors.$white;
+        background-color: colors.$red;
     }
 }
 
 .loader {
     // a circular loading icon that spins, coloured in wordpress blue
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #2271b1;
+    border: 4px solid colors.$light-grey;
+    border-top: 4px solid colors.$blue;
     border-radius: 50%;
     width: 20px;
     height: 20px;
