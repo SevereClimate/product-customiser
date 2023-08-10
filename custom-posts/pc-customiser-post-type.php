@@ -34,24 +34,72 @@ function pc_add_meta_box_for_json_config() {
     add_meta_box(
         'pc_json_config',
         'Customiser Configuration',
-        'product_customiser_json_config',
+        'product_customiser_config_meta_box',
         'product_customiser',
     );
 };
 
 function pc_register_product_customiser_config() {
+
     register_post_meta('product_customiser', 'customiser_configuration', array(
         "type" => "string",
-        "description" => "The serialised JSON data that stores this configurator",
+        "description" => "The saved configuration for this customiser",
         "single" => true,
-        "show_in_rest" => true,
+        "show_in_rest" => array(
+            "prepare_callback" => function($value) {
+                return json_encode($value);
+            },
+            "schema" => array(
+                "type" => "array",
+                "items" => array(
+                    "type" => "object",
+                    "properties" => array(
+                        "id" => array(
+                            "type" => "string",
+                        ),
+                        "title" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
+                        "parent" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
+                        "image" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
+                        "description" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
+                        "message" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
+                    )
+                )
+            )
         )
-    );
+    ));
 }
 
-function product_customiser_json_config() {
+function product_customiser_config_meta_box() {
     global $post_id;
-    echo '<div id="customiser-configuration"></div>';
+    $html = new SimpleXMLElement('<div><h1>Loading...</h1></div>');
+    $html->addAttribute('id', 'customiser-configuration');
+    $html->addAttribute('data-configuration-data', json_encode(get_post_meta($post_id, 'customiser_configuration', true)));
+    echo $html->asXML();
 }
 
 function product_customiser_enqueue_scripts($hook_suffix) {
@@ -63,9 +111,7 @@ function product_customiser_enqueue_scripts($hook_suffix) {
             wp_enqueue_media();
             $post_id = get_the_ID();
             $meta_value = get_post_meta($post_id, 'customiser_configuration', true);
-            wp_enqueue_style('product-customiser-admin', PC_PLUGIN_DIR . 'build/product-customiser-admin.css');
-            wp_localize_script('product-customiser-admin', 'initialData', array('data' => $meta_value));
-            
+            wp_enqueue_style('product-customiser-admin', PC_PLUGIN_DIR . 'build/product-customiser-admin.css');            
         }
     }
 
@@ -81,7 +127,7 @@ function save_customiser_configuration($post_id) {
     // Check if our custom data is being sent
     if (isset($_POST['customiser_configuration'])) {
         // Sanitize and save the input
-        $sanitized_data = sanitize_text_field($_POST['customiser_configuration']);
+        $sanitized_data = json_decode(stripslashes($_POST['customiser_configuration']));
         update_post_meta($post_id, 'customiser_configuration', $sanitized_data);
     }
 }

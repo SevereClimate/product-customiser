@@ -85,7 +85,7 @@ function pc_product_customiser_callback($post) {
 }
 function pc_save_product_customiser($post_id) {
     if (isset($_POST['product_customiser_id'])) {
-        $update_result = update_post_meta($post_id, 'product_customiser_id', intval($_POST['product_customiser_id']));
+        update_post_meta($post_id, 'product_customiser_id', intval($_POST['product_customiser_id']));
     }
     if (isset($_POST['product_customiser_config'])) {
         $json_string = stripslashes($_POST['product_customiser_config']);

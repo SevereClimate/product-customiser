@@ -44,8 +44,8 @@ export const ConfigurationTable = ({ config, handleUpdate }) => {
                     <h1>Configure Pricing</h1>
                     {config.length > 1 && <h2>Product Variant</h2>}
                         {config.length > 1 && 
-                        <select id="product-customiser-id" 
-                                name="product_customiser_id" 
+                        <select id="selected-product-id" 
+                                name="selected_product_id" 
                                 value={selectedProductConfig} 
                                 onChange={(e) => {
                                     setSelectedProductConfig(parseInt(e.target.value))

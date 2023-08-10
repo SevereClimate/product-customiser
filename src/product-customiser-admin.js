@@ -17,9 +17,9 @@ class layerTemplate {
 
 const CustomiserConfiguration = () => {
 
-    //Load the initial data passed in from PHP
+    let loadedData = document.getElementById('customiser-configuration').dataset.configurationData
+    console.log(loadedData)
 
-    let loadedData = window.initialData.data;
     try {
         if (typeof loadedData == "string" && loadedData.length > 0){
             loadedData = JSON.parse(loadedData);
@@ -39,8 +39,8 @@ const CustomiserConfiguration = () => {
 
             let input = $('<input>')
             .attr('type', 'hidden')
-            .attr('name', 'customiser_configuration').val(serialisedData);
-            
+            .attr('name', 'customiser_configuration').val(serialisedData);   
+                     
             $(this).append($(input));
         })
     });

@@ -1,11 +1,12 @@
-const { useEffect, useState } = wp.element;
+const { useEffect, useState, useRef } = wp.element;
 import { ConfigurationTable } from './configuration-table.jsx';
 
 export const ConfigurationProductSettings = ({ loadedData }) => {
 
-    const [selectedCustomiserId, setSelectedCustomiserId] = useState(parseInt(loadedData.selectedCustomiser));
+    const [selectedCustomiserId, setSelectedCustomiserId] = useState(loadedData.selectedCustomiser);
     const [customisers, setCustomisers] = useState([]);
     const [savedConfiguration, setSavedConfiguration] = useState([]);
+    const savedConfigurationRef = useRef(savedConfiguration);
     const [baseConfiguration, setBaseConfiguration] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +14,13 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
     const productType = loadedData.productType;
 
     useEffect(() => {
+        savedConfigurationRef.current = savedConfiguration;
+    }, [savedConfiguration]);
+
+    useEffect(() => {
+        document.querySelector("#post").addEventListener('submit', () => {
+            document.querySelector('input[name="product_customiser_config"]').value = JSON.stringify(savedConfigurationRef.current);
+        });
         fetch("/wp-json/wp/v2/product_customiser")
             .then(response => response.json())
             .then(data => {
@@ -22,14 +30,15 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
 
         fetch(`/wp-json/wp/v2/product/${loadedData.productId}`)
         .then(response => response.json()).then(data => {
-            console.log(data);
             if (data.meta.product_customiser_config == null) {
                 handleCustomiserChange(loadedData.selectedCustomiser);
             } else {
                 setSavedConfiguration(JSON.parse(data.meta.product_customiser_config));
             }
         })
-        .catch(error => console.error("Error:", error));
+        .catch((error) => {
+            console.error("Error:", error)
+        });
         if (loadedData.selectedCustomiser != 0) {
             fetch(`/wp-json/wp/v2/product_customiser/${loadedData.selectedCustomiser}`)
             .then(response => response.json()).then(data => {
@@ -48,13 +57,13 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
         loadingDialog.showModal();
         try {
             if (id == selectedCustomiserId) return;
-            if (id == 0 || id == "") {
-                setSelectedCustomiserId(0);
+            if (id == "0" || id == "") {
+                setSelectedCustomiserId("0");
                 setSavedConfiguration([]);
                 setBaseConfiguration([]);
                 return;
             }
-            setSelectedCustomiserId(parseInt(id));
+            setSelectedCustomiserId(id);
             const response = await fetch(`/wp-json/wp/v2/product_customiser/${id}`);
             const data = await response.json();
             const parsedData = JSON.parse(data.meta.customiser_configuration);
@@ -124,6 +133,7 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
                 return product;
             }
         });
+        console.log(newConfig)
         setSavedConfiguration(newConfig);
     }
 
@@ -134,10 +144,6 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
                 propagateCheckbox(config, config[index].id, value);
         });
     }
-
-    document.querySelector("#post").addEventListener('submit', () => {
-        document.querySelector('input[name="product_customiser_config"]').value = JSON.stringify(savedConfiguration);
-    });
 
         return (
             <>
