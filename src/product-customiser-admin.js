@@ -11,6 +11,7 @@ class layerTemplate {
         this.message = "";
         this.description = "";
         this.image = null;
+        this.imageId = null;
         this.parent = parentId;
     }
 }

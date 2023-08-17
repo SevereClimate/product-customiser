@@ -87,6 +87,12 @@ function pc_register_product_customiser_config() {
                                 "null",
                             ),
                         ),
+                        "imageId" => array(
+                            "type" => array(
+                                "string",
+                                "null",
+                            ),
+                        ),
                     )
                 )
             )
@@ -102,7 +108,7 @@ function product_customiser_config_meta_box() {
     echo $html->asXML();
 }
 
-function product_customiser_enqueue_scripts($hook_suffix) {
+function product_customiser_enqueue_admin_scripts($hook_suffix) {
     global $typenow;
 
     if ($typenow == 'product_customiser') {
@@ -123,6 +129,13 @@ function product_customiser_enqueue_scripts($hook_suffix) {
     }
 }
 
+function product_customiser_enqueue_scripts() {
+    if (is_product()){
+        wp_enqueue_script('product-customiser-frontend', PC_PLUGIN_DIR . 'build/product-customiser-frontend.js', array('jquery', 'wp-element', 'wp-components', 'wp-editor', 'wp-data'), null ,  true);
+        wp_enqueue_style('product-customiser-frontend', PC_PLUGIN_DIR . 'build/product-customiser-frontend.css');
+    }
+}
+
 function save_customiser_configuration($post_id) {
     // Check if our custom data is being sent
     if (isset($_POST['customiser_configuration'])) {
@@ -136,4 +149,5 @@ add_action('save_post_product_customiser', 'save_customiser_configuration');
 add_action('init', 'pc_add_custom_post_type');
 add_action('init', 'pc_register_product_customiser_config');
 add_action('add_meta_boxes', 'pc_add_meta_box_for_json_config');
-add_action('admin_enqueue_scripts', 'product_customiser_enqueue_scripts');
+add_action('admin_enqueue_scripts', 'product_customiser_enqueue_admin_scripts');
+add_action('wp_enqueue_scripts', 'product_customiser_enqueue_scripts');

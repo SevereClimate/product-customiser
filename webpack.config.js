@@ -6,8 +6,8 @@ module.exports = {
     devtool: 'inline-source-map',
     entry: {
         'product-customiser-admin': './src/product-customiser-admin.js',
-        'product-settings': './src/product-settings.js'
-
+        'product-settings': './src/product-settings.js',
+        'product-customiser-frontend': './src/product-customiser-frontend.js'
     },
     output: {
         filename: '[name].js',

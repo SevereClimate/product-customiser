@@ -19,7 +19,7 @@ const ConfigurationRow = ({ config, reportUpdate, level }) => {
     )
 }
 
-export const ConfigurationTable = ({ config, handleUpdate }) => {
+export const ConfigurationTable = ({ config, handleUpdate, isLoading }) => {
     const [showingModal, setShowingModal] = useState(false);
     const [selectedProductConfig, setSelectedProductConfig] = useState(0);
 
@@ -66,7 +66,7 @@ export const ConfigurationTable = ({ config, handleUpdate }) => {
                     </table>
                     <div style={{marginTop: "15px"}} className="button button-primary" id="save-config" onClick={()=>{document.querySelector('#configuration-table-modal').close()}}>Close Window</div>
                 </dialog>
-                <div className="button button-primary" onClick={()=>{document.querySelector('#configuration-table-modal').showModal()}}>Configure Pricing</div>
+                <div disabled={isLoading} className="button button-primary" onClick={()=>{document.querySelector('#configuration-table-modal').showModal()}}>{isLoading ? "Loading..." : "Configure Pricing"}</div>
             </>
         )
     };

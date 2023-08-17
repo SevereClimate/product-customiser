@@ -16,6 +16,8 @@
 include_once('custom-posts/pc-customiser-post-type.php');
 include_once('custom-posts/pc-product-meta.php');
 include_once('hooks/pc-subroutines.php');
-require_once('rest/pc-get-product-variations.php');
+include_once('rest/pc-get-product-variations.php');
+include_once('hooks/pc-frontend.php');
+
 
 

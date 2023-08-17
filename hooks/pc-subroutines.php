@@ -11,6 +11,7 @@ function pc_clean_up_associated_products($customiser_id) {
         ),
     ));
     foreach($products as $product) {
+        delete_transient('pc_frontend_configuration_' . $product->get_ID());
         delete_post_meta($product->ID, 'product_customiser_id');
         delete_post_meta($product->ID, 'product_customiser_config');
     }
@@ -109,6 +110,7 @@ function pc_update_linked_product_configurations($linked_product_ids, $base_conf
                 'title' => $product_customiser_config_product["title"],
                 'config' => $updated_product_customiser_config
             );
+            delete_transient('pc_frontend_configuration_' . $product_id);
             array_push($updated_product_customiser_config_products, $replacement_product);
         }
         

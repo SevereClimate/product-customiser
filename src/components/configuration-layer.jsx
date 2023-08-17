@@ -20,14 +20,17 @@ export const ConfigurationLayer = ({ config, reportUpdate, addOption, allLayers,
         )
     }
 
-    const selectImage = (e) => {
+    const selectImage = (config) => {
         const image = wp.media({
             title: 'Select Image',
-            multiple: false
+            multiple: false,
+            value: config.imageId
         }).open().on('select', () => {
             const uploadedImage = image.state().get('selection').first();
             const imageSrc = uploadedImage.toJSON().url;
+            const imageId = uploadedImage.toJSON().id;
             reportUpdate(config.id, 'image', imageSrc);
+            reportUpdate(config.id, 'imageId', imageId);
         }
         );
     }
@@ -48,8 +51,8 @@ export const ConfigurationLayer = ({ config, reportUpdate, addOption, allLayers,
                     }
                 </div>
                 <div className="image-picker">
-                    {config.image && <img title="Replace image" src={config.image} onClick={selectImage} />}
-                    {!config.image && <div title="Add image" className="image-button" onClick={selectImage}><div className="dashicons dashicons-format-image"></div></div>}
+                    {config.image && <img title="Replace image" src={config.image} onClick={()=>{selectImage(config)}} />}
+                    {!config.image && <div title="Add image" className="image-button" onClick={()=>{selectImage(config)}}><div className="dashicons dashicons-format-image"></div></div>}
                 </div>
                 <div className="description">
                         <textarea name="description" value={config.description} placeholder={`Description for ${config.title || 'this option'}. `} onChange={(e) => handleUpdate(e)} />

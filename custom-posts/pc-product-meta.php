@@ -95,6 +95,7 @@ function pc_save_product_customiser($post_id) {
         if (json_last_error() !== JSON_ERROR_NONE) {
             wp_die($error_message);
         }
+        delete_transient('pc_frontend_configuration_' . $post_id);
         update_post_meta($post_id, 'product_customiser_config', $decoded_config);
     }
 }

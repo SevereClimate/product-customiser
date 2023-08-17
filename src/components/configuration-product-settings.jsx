@@ -9,7 +9,7 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
     const savedConfigurationRef = useRef(savedConfiguration);
     const [baseConfiguration, setBaseConfiguration] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const productType = loadedData.productType;
 
@@ -25,6 +25,7 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
             .then(response => response.json())
             .then(data => {
                 setCustomisers(data);
+                setIsLoading(false);
             })
             .catch(error => console.error("Error:", error));
 
@@ -147,11 +148,11 @@ export const ConfigurationProductSettings = ({ loadedData }) => {
 
         return (
             <>
-                <select id="product-customiser-id" name="product_customiser_id" value={selectedCustomiserId} onChange={(e) => handleCustomiserChange(e.target.value)}>
-                    <option value="0" >-Select a Product Customiser-</option>
+                <select disabled={isLoading} id="product-customiser-id" name="product_customiser_id" value={selectedCustomiserId} onChange={(e) => handleCustomiserChange(e.target.value)}>
+                    <option value="0" >{!isLoading ? "-Select a Product Customiser-" : "Loading..."}</option>
                     {customisers.map(customiser => <option value={customiser.id}>{customiser.title.rendered}</option>)}
                 </select>
-                {(savedConfiguration != null && selectedCustomiserId != 0) && <ConfigurationTable handleUpdate={handleUpdate} config={savedConfiguration} />}
+                {(savedConfiguration != null && selectedCustomiserId != 0) && <ConfigurationTable handleUpdate={handleUpdate} config={savedConfiguration} isLoading={isLoading}/>}
                 <input type="hidden" name="product_customiser_config" value="" />
                 <dialog id="loading-dialog"><div class="loader"></div><h1>Loading Product Customiser...</h1></dialog>
             </>
