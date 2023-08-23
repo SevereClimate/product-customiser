@@ -28,6 +28,13 @@
             }
         }
     }
+    .pc-chosen-option {
+        margin-top: 20px;
+        background: #eeeeee;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid black;
+    }
     .pc-focussed-options {
         display: grid;
         grid-template-columns: repeat(5, 1fr);

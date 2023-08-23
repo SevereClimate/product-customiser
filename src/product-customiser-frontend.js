@@ -1,5 +1,6 @@
 import { useState, useEffect, createRoot } from '@wordpress/element';
 import './product-customiser-frontend.scss';
+import apiFetch from '@wordpress/api-fetch';
 
 const ProductCustomiserFrontend = ({ configuration }) => {
     const [selectedProductID, setSelectedProductID] = useState(0);
@@ -35,13 +36,14 @@ const ProductCustomiserForm = ({ selectedProduct }) => {
     const [chosenOption, setChosenOption] = useState("");
 
     const returnOptionPrice = (option, selectedProduct) => {
+        console.log("product coming out", selectedProduct)
         if (option.price) {
             return option.price;
         } else if (option.parent) {
             const parentOption = selectedProduct.config.find(a => a.id === option.parent);
             return parseFloat(returnOptionPrice(parentOption, selectedProduct));
         } else {
-            return parseFloat(selectedProduct["base_price"])
+            return parseFloat(selectedProduct.base_price)
         }
     };
 
@@ -53,15 +55,26 @@ const ProductCustomiserForm = ({ selectedProduct }) => {
     
 
     const handleOptionClick = (option) => {
-        const children = selectedProduct.config.filter(a => a.parent == option.id);
-        if (children.length == 0) {
-            setChosenOption(option.id);
-            document.querySelector('.price .woocommerce-Price-amount.amount').innerHTML = `£${returnOptionPrice(option, selectedProduct).toLocaleString()}`;
+        const optionChildren = selectedProduct.config.filter(a => a.parent == option.id);
+        if (optionChildren.length == 0) {
+            setChosenOption(option);
+            document.querySelector('.price .woocommerce-Price-amount').innerHTML = `£${returnOptionPrice(option, selectedProduct).toLocaleString()}`;
+            document.querySelector('input[name="pc_chosen_option"]').value = option.id;
             return;
         }
         setFocusedOption(option);
-        setChildren(children);
+        setChildren(optionChildren);
     };
+
+    const returnChosenOptionFullTitle = (option, selectedProduct) => {
+        let currentOption = option;
+        let title = currentOption.title
+        while (currentOption.parent) {
+            currentOption = selectedProduct.config.find(a => a.id === currentOption.parent);
+            title = `${currentOption.title} - ${title}`;
+        }
+        return title;
+    }
 
     const renderChildren = () => {
         return children.map((child, index) => {
@@ -80,7 +93,7 @@ const ProductCustomiserForm = ({ selectedProduct }) => {
                     <div className={`dashicons dashicons-arrow-left-alt2 ${!focusedOption?.parent && "hide-icon"}`} onClick={() => {handleOptionClick(selectedProduct.config.find(a => a.id === focusedOption.parent))}}></div>
                     {focusedOption && <h1 key={Math.random()}>{focusedOption.title}</h1>}
                 </div>
-                {chosenOption && <div className="pc-chosen-option"><strong>Selected: </strong>{selectedProduct.config.find(a=>a.id == chosenOption).title} - £{returnOptionPrice(chosenOption)}</div>}
+                {chosenOption && <div className="pc-chosen-option"><strong>Selected: {returnChosenOptionFullTitle(chosenOption, selectedProduct)}</strong> - £{returnOptionPrice(chosenOption, selectedProduct)}</div>}
                 <div className="pc-focussed-options">
                     {renderChildren()}
                 </div>
@@ -95,7 +108,7 @@ if (container) {
     for (let product of window.customiserFrontEnd.products){
         for (let config of product.config){
             if (config.imageThumbnail) {
-                const preloadedImage = new Image().src(config.imageThumbnail)
+                new Image().src = config.imageThumbnail 
             }
         }
     }

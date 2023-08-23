@@ -107,3 +107,78 @@ function pc_load_dashicons_front_end() {
   wp_enqueue_style( 'dashicons' );
 }
 
+function pc_add_to_cart_with_customiser_options( $cart_item_data, $product_id, $variation_id){
+    if (isset( $_POST['pc_chosen_option'] ) && !empty($_POST['pc_chosen_option'])) {
+        $chosen_option_id = sanitize_text_field($_POST['pc_chosen_option']);
+        $cart_item_data['pc_chosen_option'] = $chosen_option_id;
+        $saved_configuration = pc_return_product_customiser_saved_configuration($product_id);
+        $product_or_variation_id = $variation_id ? $variation_id : $product_id;
+        $product_configuration = $saved_configuration[array_search($product_or_variation_id, array_column($saved_configuration, 'id'))];
+        $chosen_option = $product_configuration["config"][array_search($chosen_option_id, array_column($product_configuration["config"], 'id'))];
+
+        $chosen_option_title = "";
+        $chosen_option_price = $chosen_option["price"];
+
+        while ($chosen_option["parent"] != null){
+            $parent_id = $chosen_option["parent"];
+            if ($chosen_option_price == null) {
+                $chosen_option_price = $product_configuration["config"][array_search($parent_id, array_column($product_configuration["config"], 'id'))]["price"];
+            }
+            if ($chosen_option_title == "") {
+                $chosen_option_title = $chosen_option["title"];
+            } else {
+                $chosen_option_title = $chosen_option["title"] . ' - ' . $chosen_option_title;
+            }
+            $chosen_option = $product_configuration["config"][array_search($parent_id, array_column($product_configuration["config"], 'id'))];
+        }
+        if ($chosen_option_price == null) {
+           $chosen_option_price = wc_get_product($product_or_variation_id)->get_price();
+        }
+
+        $cart_item_data['pc_chosen_option_title'] = $chosen_option_title;
+        $cart_item_data['pc_chosen_option_price'] = $chosen_option_price;
+        $cart_item_data['pc_customiser_title'] = $chosen_option["title"]; //this gives us the name of the top level option as the key!
+
+        return $cart_item_data;
+    } else {
+        return $cart_item_data;
+    }
+}
+
+add_filter( 'woocommerce_add_cart_item_data', 'pc_add_to_cart_with_customiser_options', 10, 3 );
+
+function pc_apply_custom_price_to_cart( $cart ){
+    if ( is_admin() && ! defined( 'DOING_AJAX' ) ) return;
+
+    foreach( $cart->get_cart() as $cart_item ){
+        if( isset( $cart_item['pc_chosen_option_price'] ) ) {
+            $cart_item['data']->set_price( $cart_item['pc_chosen_option_price'] );
+        }
+    }
+}
+
+add_action( 'woocommerce_before_calculate_totals', 'pc_apply_custom_price_to_cart', 10, 1 );
+
+function pc_display_custom_item_data( $item_data, $cart_item ) {
+    if( isset( $cart_item['pc_chosen_option_title'] ) ) {
+        $item_data[] = array(
+            'key'     => $cart_item['pc_customiser_title'],
+            'value'   => $cart_item['pc_chosen_option_title'],
+        );
+    }
+    return $item_data;
+}
+add_filter( 'woocommerce_get_item_data', 'pc_display_custom_item_data', 10, 2 );
+
+function pc_add_custom_note_order_item_meta( $item, $cart_item_key, $values, $order ) {
+    if( isset( $values['pc_chosen_option_title'] ) ) {
+        $item->add_meta_data( 'Customisation', $values['pc_chosen_option_title'] );
+    }
+}
+add_action( 'woocommerce_checkout_create_order_line_item', 'pc_add_custom_note_order_item_meta', 10, 4 );
+
+function pc_echo_customiser_chosen_option_input() {
+    echo '<input type="hidden" name="pc_chosen_option" value=""/>';
+}
+
+add_action('woocommerce_before_add_to_cart_button', 'pc_echo_customiser_chosen_option_input', 1);
