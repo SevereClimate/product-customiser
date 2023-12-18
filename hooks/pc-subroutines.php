@@ -20,9 +20,12 @@ function pc_clean_up_associated_products($customiser_id) {
 function pc_add_trash_customiser_hook($post_id){
     $post_type = get_post_type($post_id);
     
-    if ($post_type != 'product_customiser') return;
+    if ($post_type == 'product_customiser') {
+        do_action('pc_trash_customiser', $post_id);
+    }
+    
+    return;
 
-    do_action('pc_trash_customiser', $post_id);
 }
 
 add_action('wp_trash_post', 'pc_add_trash_customiser_hook');
@@ -124,9 +127,12 @@ function pc_handle_customiser_update($base_configuration_id){
     // $customiser_id: the id of the customiser that has been updated
     // @return
     // null
-    if (get_post_type($base_configuration_id) != 'product_customiser') return;
-    $linked_product_ids = pc_retrieve_linked_products($base_configuration_id);
-    pc_update_linked_product_configurations($linked_product_ids, $base_configuration_id);
+    if (get_post_type($base_configuration_id) == 'product_customiser'){
+        $linked_product_ids = pc_retrieve_linked_products($base_configuration_id);
+        pc_update_linked_product_configurations($linked_product_ids, $base_configuration_id);
+    }
+
+    return;
 
 }
 

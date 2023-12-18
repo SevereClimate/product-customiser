@@ -1,6 +1,5 @@
 import { useState, useEffect, createRoot } from '@wordpress/element';
 import './product-customiser-frontend.scss';
-import apiFetch from '@wordpress/api-fetch';
 
 const ProductCustomiserFrontend = ({ configuration }) => {
     const [selectedProductID, setSelectedProductID] = useState(0);
@@ -13,6 +12,7 @@ const ProductCustomiserFrontend = ({ configuration }) => {
                 const productId = parseInt(jQuery('input[name="variation_id"]').val());
                 setSelectedProductID(productId ? productId : 0);
             };
+            jQuery('.variations_form').on('wc_variation_form', handleShowVariation);
             jQuery('.variations_form').on('woocommerce_variation_has_changed', handleShowVariation);
             return () => {
                 jQuery('.variations_form').off('woocommerce_variation_has_changed', handleShowVariation);
@@ -103,13 +103,17 @@ const ProductCustomiserForm = ({ selectedProduct }) => {
 };
 
 const container = createRoot(document.getElementById('product-customiser-frontend-container'));
-if (container) {
-    container.render(<ProductCustomiserFrontend configuration={window.customiserFrontEnd} />);
-    for (let product of window.customiserFrontEnd.products){
-        for (let config of product.config){
-            if (config.imageThumbnail) {
-                new Image().src = config.imageThumbnail 
+
+jQuery(document).ready(function ($) {
+
+    if (container) {
+        container.render(<ProductCustomiserFrontend configuration={window.customiserFrontEnd} />);
+        for (let product of window.customiserFrontEnd.products){
+            for (let config of product.config){
+                if (config.imageThumbnail) {
+                    new Image().src = config.imageThumbnail 
+                }
             }
         }
     }
-}
+});
